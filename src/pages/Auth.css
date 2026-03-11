@@ -1,0 +1,124 @@
+.auth-page {
+  min-height: calc(100vh - 64px - 300px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fc;
+  padding: 2rem 1rem;
+}
+
+.auth-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+.auth-card h2 {
+  color: #1a1a2e;
+  margin-bottom: 0.3rem;
+}
+
+.auth-subtitle {
+  color: #666;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.auth-card .form-group {
+  margin-bottom: 1.2rem;
+}
+
+.auth-card .form-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.auth-card .form-group input[type="text"],
+.auth-card .form-group input[type="email"],
+.auth-card .form-group input[type="password"],
+.auth-card .form-group input[type="tel"] {
+  width: 100%;
+  padding: 0.7rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.auth-card .form-group input:focus {
+  outline: none;
+  border-color: #e94560;
+}
+
+.btn-full {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.auth-link {
+  text-align: center;
+  margin-top: 1.2rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.auth-link a {
+  color: #e94560;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-link a:hover {
+  text-decoration: underline;
+}
+
+.demo-credentials {
+  margin-top: 1.5rem;
+  padding: 0.8rem;
+  background: #f0f4ff;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+}
+
+.radio-group {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.radio-card {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.radio-card:hover {
+  border-color: #e94560;
+}
+
+.radio-card.selected {
+  border-color: #e94560;
+  background: #fef2f4;
+  color: #e94560;
+}
+
+.radio-card input {
+  display: none;
+}

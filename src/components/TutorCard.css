@@ -1,0 +1,146 @@
+.tutor-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tutor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.tutor-avatar {
+  flex-shrink: 0;
+}
+
+.tutor-avatar img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.tutor-initials {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.tutor-info {
+  flex: 1;
+}
+
+.tutor-info h3 {
+  margin: 0 0 0.3rem;
+  color: #1a1a2e;
+}
+
+.tutor-quals {
+  color: #e94560;
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem;
+  font-weight: 500;
+}
+
+.tutor-bio {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 0.8rem;
+}
+
+.tutor-subjects-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.subject-tag {
+  background: #f0f4ff;
+  color: #1a1a2e;
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.tutor-footer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.tutor-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.star-icon {
+  color: #f5a623;
+}
+
+.review-count {
+  color: #999;
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+.tutor-price {
+  color: #e94560;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.btn-book-tutor {
+  margin-left: auto;
+  background: #e94560;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-book-tutor:hover {
+  background: #d63851;
+}
+
+@media (max-width: 600px) {
+  .tutor-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .tutor-subjects-list {
+    justify-content: center;
+  }
+
+  .tutor-footer {
+    justify-content: center;
+  }
+
+  .btn-book-tutor {
+    margin-left: 0;
+    width: 100%;
+  }
+}
