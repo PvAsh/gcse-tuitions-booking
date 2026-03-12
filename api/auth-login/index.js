@@ -35,11 +35,10 @@ module.exports = async function (context, req) {
 
     const token = generateToken(user);
     const { password: _, ...safeUser } = user;
-    const secret = (process.env.JWT_SECRET || 'dev-secret-change-in-production').trim();
 
     context.res = {
       headers: { 'Content-Type': 'application/json' },
-      body: { user: safeUser, token, debugSecretHash: require('crypto').createHash('md5').update(secret).digest('hex') },
+      body: { user: safeUser, token },
     };
   } catch (err) {
     context.log.error('Login error:', err.message);

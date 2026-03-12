@@ -2,17 +2,9 @@ const { getContainer } = require('../shared/database');
 const { requireAuth } = require('../shared/auth');
 
 module.exports = async function (context, req) {
-  context.log('Headers:', JSON.stringify(req.headers));
-  context.log('JWT_SECRET set:', !!process.env.JWT_SECRET, 'length:', (process.env.JWT_SECRET || '').length);
-
   const result = requireAuth(req);
   if (result.status) {
-    const secret = (process.env.JWT_SECRET || 'dev-secret-change-in-production').trim();
-    const authHeader = req.headers.authorization || req.headers.Authorization || '';
-    const tokenStr = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
-    let testVerify = null;
-    try { const jwt = require('jsonwebtoken'); testVerify = jwt.decode(tokenStr); } catch(e) { testVerify = e.message; }
-    context.res = { status: result.status, headers: { 'Content-Type': 'application/json' }, body: { error: result.body.error, debug: { secretHash: require('crypto').createHash('md5').update(secret).digest('hex'), tokenFirst50: tokenStr.substring(0, 50), decoded: testVerify, authError: req._authError } } };
+    context.res = result;
     return;
   }
   const user = result.user;

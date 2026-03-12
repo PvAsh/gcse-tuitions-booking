@@ -12,12 +12,11 @@ function generateToken(user) {
 
 function verifyToken(req) {
   const headers = req.headers || {};
-  const authHeader = headers.authorization || headers.Authorization;
-  if (!authHeader?.startsWith('Bearer ')) return null;
+  const authHeader = headers['x-auth-token'];
+  if (!authHeader) return null;
 
   try {
-    const token = authHeader.slice(7).trim();
-    return jwt.verify(token, JWT_SECRET);
+    return jwt.verify(authHeader.trim(), JWT_SECRET);
   } catch (err) {
     req._authError = err.message;
     return null;
