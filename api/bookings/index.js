@@ -7,7 +7,7 @@ module.exports = async function (context, req) {
 
   const result = requireAuth(req);
   if (result.status) {
-    context.res = { status: result.status, headers: { 'Content-Type': 'application/json' }, body: { error: result.body.error, debug: { hasAuth: !!req.headers.authorization, secretSet: !!process.env.JWT_SECRET, secretLen: (process.env.JWT_SECRET || '').length } } };
+    context.res = { status: result.status, headers: { 'Content-Type': 'application/json' }, body: { error: result.body.error, debug: { hasAuth: !!(req.headers.authorization || req.headers.Authorization), secretSet: !!process.env.JWT_SECRET, secretLen: (process.env.JWT_SECRET || '').length, authError: req._authError } } };
     return;
   }
   const user = result.user;
