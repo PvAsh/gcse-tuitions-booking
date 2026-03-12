@@ -24,3 +24,4 @@ yarn-error.log*
 
 # Azure Functions
 api/local.settings.json
+api/node_modules
