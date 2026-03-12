@@ -7,7 +7,12 @@ module.exports = async function (context, req) {
 
   const result = requireAuth(req);
   if (result.status) {
-    context.res = { status: result.status, headers: { 'Content-Type': 'application/json' }, body: { error: result.body.error, debug: { hasAuth: !!(req.headers.authorization || req.headers.Authorization), secretSet: !!process.env.JWT_SECRET, secretLen: (process.env.JWT_SECRET || '').length, authError: req._authError } } };
+    const secret = (process.env.JWT_SECRET || 'dev-secret-change-in-production').trim();
+    const authHeader = req.headers.authorization || req.headers.Authorization || '';
+    const tokenStr = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+    let testVerify = null;
+    try { const jwt = require('jsonwebtoken'); testVerify = jwt.decode(tokenStr); } catch(e) { testVerify = e.message; }
+    context.res = { status: result.status, headers: { 'Content-Type': 'application/json' }, body: { error: result.body.error, debug: { secretHash: require('crypto').createHash('md5').update(secret).digest('hex'), tokenFirst50: tokenStr.substring(0, 50), decoded: testVerify, authError: req._authError } } };
     return;
   }
   const user = result.user;
