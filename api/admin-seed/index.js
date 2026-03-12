@@ -22,6 +22,14 @@ module.exports = async function (context, req) {
       .fetchAll();
 
     if (resources.length > 0) {
+      // Update existing user to admin role if not already
+      const existing = resources[0];
+      if (existing.role !== 'admin') {
+        existing.role = 'admin';
+        await container.item(existing.id, 'user').replace(existing);
+        context.res = { body: { message: 'Existing user updated to admin' } };
+        return;
+      }
       context.res = { body: { message: 'Admin user already exists' } };
       return;
     }
