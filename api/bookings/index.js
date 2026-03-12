@@ -2,9 +2,12 @@ const { getContainer } = require('../shared/database');
 const { requireAuth } = require('../shared/auth');
 
 module.exports = async function (context, req) {
+  context.log('Headers:', JSON.stringify(req.headers));
+  context.log('JWT_SECRET set:', !!process.env.JWT_SECRET, 'length:', (process.env.JWT_SECRET || '').length);
+
   const result = requireAuth(req);
   if (result.status) {
-    context.res = result;
+    context.res = { status: result.status, headers: { 'Content-Type': 'application/json' }, body: { error: result.body.error, debug: { hasAuth: !!req.headers.authorization, secretSet: !!process.env.JWT_SECRET, secretLen: (process.env.JWT_SECRET || '').length } } };
     return;
   }
   const user = result.user;

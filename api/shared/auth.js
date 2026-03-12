@@ -11,7 +11,8 @@ function generateToken(user) {
 }
 
 function verifyToken(req) {
-  const authHeader = req.headers?.authorization;
+  const headers = req.headers || {};
+  const authHeader = headers.authorization || headers.Authorization;
   if (!authHeader?.startsWith('Bearer ')) return null;
 
   try {
