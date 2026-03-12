@@ -149,7 +149,7 @@ export default function Admin() {
                       <td><span className={`status-badge ${b.status}`}>{b.status}</span></td>
                       <td>
                         {b.status === 'confirmed' && (
-                          <button className="btn-cancel-sm" onClick={() => cancelBooking(b.id)}>Cancel</button>
+                          <button className="btn-cancel-sm" onClick={async () => await cancelBooking(b.id)}>Cancel</button>
                         )}
                       </td>
                     </tr>

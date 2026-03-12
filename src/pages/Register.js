@@ -18,7 +18,7 @@ export default function Register() {
 
   const update = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (form.password !== form.confirmPassword) {
       toast.error('Passwords do not match');
@@ -28,7 +28,7 @@ export default function Register() {
       toast.error('Password must be at least 6 characters');
       return;
     }
-    const result = register({
+    const result = await register({
       name: form.name,
       email: form.email,
       password: form.password,

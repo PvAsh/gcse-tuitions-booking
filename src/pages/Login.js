@@ -10,9 +10,9 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = login(email, password);
+    const result = await login(email, password);
     if (result.success) {
       toast.success('Welcome back!');
       navigate('/dashboard');

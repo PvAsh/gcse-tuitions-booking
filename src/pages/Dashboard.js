@@ -7,13 +7,9 @@ import { toast } from 'react-toastify';
 import './Dashboard.css';
 
 export default function Dashboard() {
-  const { user, updateProfile } = useAuth();
+  const { user } = useAuth();
   const { getUserBookings, cancelBooking } = useBookings();
   const [tab, setTab] = useState('bookings');
-  const [profileForm, setProfileForm] = useState({
-    name: user?.name || '',
-    phone: user?.phone || '',
-  });
 
   const bookings = getUserBookings();
   const upcoming = bookings
@@ -23,17 +19,11 @@ export default function Dashboard() {
     .filter(b => b.status !== 'confirmed' || new Date(b.date) < new Date())
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  const handleCancel = (id) => {
+  const handleCancel = async (id) => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
-      cancelBooking(id);
+      await cancelBooking(id);
       toast.info('Booking cancelled');
     }
-  };
-
-  const handleProfileSave = (e) => {
-    e.preventDefault();
-    updateProfile(profileForm);
-    toast.success('Profile updated');
   };
 
   return (
@@ -114,31 +104,11 @@ export default function Dashboard() {
         {tab === 'profile' && (
           <div className="profile-section">
             <h2>My Profile</h2>
-            <form onSubmit={handleProfileSave}>
-              <div className="profile-info">
-                <p><FaEnvelope /> {user?.email}</p>
-                <p><FaUser /> Role: {user?.role}</p>
-              </div>
-              <div className="form-group">
-                <label>Full Name</label>
-                <input
-                  type="text"
-                  value={profileForm.name}
-                  onChange={e => setProfileForm(p => ({ ...p, name: e.target.value }))}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Phone</label>
-                <input
-                  type="tel"
-                  value={profileForm.phone}
-                  onChange={e => setProfileForm(p => ({ ...p, phone: e.target.value }))}
-                  placeholder="07123 456789"
-                />
-              </div>
-              <button type="submit" className="btn-primary">Save Changes</button>
-            </form>
+            <div className="profile-info">
+              <p><FaUser /> {user?.name}</p>
+              <p><FaEnvelope /> {user?.email}</p>
+              <p><FaUser /> Role: {user?.role}</p>
+            </div>
           </div>
         )}
       </div>

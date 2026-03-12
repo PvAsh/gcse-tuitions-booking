@@ -16,22 +16,6 @@ import Dashboard from './pages/Dashboard';
 import Admin from './pages/Admin';
 import './App.css';
 
-function seedAdminUser() {
-  const users = JSON.parse(localStorage.getItem('gcse_users') || '[]');
-  if (!users.find(u => u.email === 'admin@gcsetuitions.co.uk')) {
-    users.push({
-      id: 1,
-      name: 'Admin',
-      email: 'admin@gcsetuitions.co.uk',
-      password: 'admin123',
-      role: 'admin',
-      createdAt: new Date().toISOString(),
-    });
-    localStorage.setItem('gcse_users', JSON.stringify(users));
-  }
-}
-seedAdminUser();
-
 function App() {
   return (
     <BrowserRouter>

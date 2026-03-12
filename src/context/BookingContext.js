@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
+import { api } from '../services/api';
 
 const BookingContext = createContext(null);
 
@@ -7,37 +8,41 @@ export function BookingProvider({ children }) {
   const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
 
+  const fetchBookings = useCallback(async () => {
+    if (!user) {
+      setBookings([]);
+      return;
+    }
+    try {
+      const data = await api.getBookings();
+      setBookings(data);
+    } catch {
+      setBookings([]);
+    }
+  }, [user]);
+
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('gcse_bookings') || '[]');
-    setBookings(stored);
-  }, []);
+    fetchBookings();
+  }, [fetchBookings]);
 
-  const saveBookings = (updated) => {
-    setBookings(updated);
-    localStorage.setItem('gcse_bookings', JSON.stringify(updated));
-  };
-
-  const createBooking = (bookingData) => {
+  const createBooking = async (bookingData) => {
     if (!user) return { success: false, message: 'Please log in to book' };
-    const newBooking = {
-      id: Date.now(),
-      userId: user.id,
-      userName: user.name,
-      userEmail: user.email,
-      status: 'confirmed',
-      createdAt: new Date().toISOString(),
-      ...bookingData,
-    };
-    const updated = [...bookings, newBooking];
-    saveBookings(updated);
-    return { success: true, booking: newBooking };
+    try {
+      const booking = await api.createBooking(bookingData);
+      setBookings(prev => [booking, ...prev]);
+      return { success: true, booking };
+    } catch (err) {
+      return { success: false, message: err.message };
+    }
   };
 
-  const cancelBooking = (bookingId) => {
-    const updated = bookings.map(b =>
-      b.id === bookingId ? { ...b, status: 'cancelled' } : b
-    );
-    saveBookings(updated);
+  const cancelBooking = async (bookingId) => {
+    try {
+      const updated = await api.cancelBooking(bookingId);
+      setBookings(prev => prev.map(b => b.id === bookingId ? updated : b));
+    } catch {
+      // silent fail, could add toast here
+    }
   };
 
   const getUserBookings = () => {
@@ -59,6 +64,7 @@ export function BookingProvider({ children }) {
       getUserBookings,
       getAllBookings,
       getBookingsByDate,
+      refreshBookings: fetchBookings,
     }}>
       {children}
     </BookingContext.Provider>

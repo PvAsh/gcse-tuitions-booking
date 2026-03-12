@@ -64,14 +64,14 @@ export default function Booking() {
     return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!user) {
       toast.info('Please log in to complete your booking');
       navigate('/login');
       return;
     }
 
-    const result = createBooking({
+    const result = await createBooking({
       subjectId: form.subjectId,
       subjectName: selectedSubject?.name,
       tutorId: Number(form.tutorId),

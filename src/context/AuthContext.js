@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { api, setToken, clearToken, getToken } from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -7,61 +8,46 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem('gcse_user');
-    if (stored) {
-      setUser(JSON.parse(stored));
+    const token = getToken();
+    if (token) {
+      api.getMe()
+        .then(data => setUser(data.user))
+        .catch(() => clearToken())
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
-  const login = (email, password) => {
-    const users = JSON.parse(localStorage.getItem('gcse_users') || '[]');
-    const found = users.find(u => u.email === email && u.password === password);
-    if (!found) return { success: false, message: 'Invalid email or password' };
-    const { password: _, ...userData } = found;
-    setUser(userData);
-    localStorage.setItem('gcse_user', JSON.stringify(userData));
-    return { success: true };
+  const login = async (email, password) => {
+    try {
+      const data = await api.login(email, password);
+      setToken(data.token);
+      setUser(data.user);
+      return { success: true };
+    } catch (err) {
+      return { success: false, message: err.message };
+    }
   };
 
-  const register = (userData) => {
-    const users = JSON.parse(localStorage.getItem('gcse_users') || '[]');
-    if (users.find(u => u.email === userData.email)) {
-      return { success: false, message: 'Email already registered' };
+  const register = async (userData) => {
+    try {
+      const data = await api.register(userData);
+      setToken(data.token);
+      setUser(data.user);
+      return { success: true };
+    } catch (err) {
+      return { success: false, message: err.message };
     }
-    const newUser = {
-      id: Date.now(),
-      ...userData,
-      role: userData.role || 'student',
-      createdAt: new Date().toISOString(),
-    };
-    users.push(newUser);
-    localStorage.setItem('gcse_users', JSON.stringify(users));
-    const { password: _, ...safe } = newUser;
-    setUser(safe);
-    localStorage.setItem('gcse_user', JSON.stringify(safe));
-    return { success: true };
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('gcse_user');
-  };
-
-  const updateProfile = (updates) => {
-    const updated = { ...user, ...updates };
-    setUser(updated);
-    localStorage.setItem('gcse_user', JSON.stringify(updated));
-    const users = JSON.parse(localStorage.getItem('gcse_users') || '[]');
-    const idx = users.findIndex(u => u.id === user.id);
-    if (idx !== -1) {
-      users[idx] = { ...users[idx], ...updates };
-      localStorage.setItem('gcse_users', JSON.stringify(users));
-    }
+    clearToken();
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateProfile }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
